@@ -41,4 +41,14 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function programs()
+    {
+        return $this->belongsToMany(Program::class, 'programs_users', 'user_id', 'program_id');
+    }
+
+    public function groups()
+    {
+        return $this->belongsToMany(Group::class, 'users_groups', 'user_id', 'group_id');
+    }
 }

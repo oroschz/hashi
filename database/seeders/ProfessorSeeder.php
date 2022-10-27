@@ -1,0 +1,22 @@
+<?php
+
+namespace Database\Seeders;
+
+use App\Models\Professor;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Database\Seeder;
+
+class ProfessorSeeder extends Seeder
+{
+    /**
+     * Run the database seeds.
+     *
+     * @return void
+     */
+    public function run()
+    {
+        Professor::create(['name' => 'Profesor #1']);
+        Professor::create(['name' => 'Profesor #2']);
+        Professor::create(['name' => 'Profesor #3']);
+    }
+}
