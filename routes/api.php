@@ -25,3 +25,7 @@ Route::middleware('auth:sanctum')->get('/sessions', function (Request $request) 
 
 Route::post('/login', [Api\AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->delete('/logout', [Api\AuthController::class, 'logout']);
+
+Route::middleware('auth:sanctum')->get('/survey', [Api\SurveyController::class, 'index']);
+Route::middleware('auth:sanctum')->get('/survey/{group}', [Api\SurveyController::class, 'state']);
+Route::middleware('auth:sanctum')->post('/survey/{group}/{question}', [Api\SurveyController::class, 'update']);
