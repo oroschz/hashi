@@ -15,17 +15,18 @@ use App\Http\Controllers\Api;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/me', function (Request $request) {
-    return $request->user();
+Route::controller(Api\TokenController::class)->group(function () {
+    Route::get('/token', 'index')->middleware('auth:sanctum');
+    Route::post('/token', 'store');
+    Route::delete('/token', 'destroy')->middleware('auth:sanctum');
 });
 
-Route::middleware('auth:sanctum')->get('/sessions', function (Request $request) {
-    return $request->user()->tokens;
+// Route::middleware('auth:sanctum')->get('/survey', [Api\SurveyController::class, 'index']);
+// Route::middleware('auth:sanctum')->get('/survey/{group}', [Api\SurveyController::class, 'state']);
+// Route::middleware('auth:sanctum')->post('/survey/{group}/{question}', [Api\SurveyController::class, 'update']);
+
+Route::middleware('auth:sanctum')->controller(Api\SurveyController::class)->group(function () {
+    Route::get('/survey', 'index');
+    Route::get('/survey/{group}', 'state');
+    Route::post('/survey/{group}/{question}', 'update');
 });
-
-Route::post('/login', [Api\AuthController::class, 'login']);
-Route::middleware('auth:sanctum')->delete('/logout', [Api\AuthController::class, 'logout']);
-
-Route::middleware('auth:sanctum')->get('/survey', [Api\SurveyController::class, 'index']);
-Route::middleware('auth:sanctum')->get('/survey/{group}', [Api\SurveyController::class, 'state']);
-Route::middleware('auth:sanctum')->post('/survey/{group}/{question}', [Api\SurveyController::class, 'update']);

@@ -8,10 +8,14 @@ use App\Models\Group;
 use App\Models\Question;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redis;
 
 class SurveyController extends Controller
 {
+    /**
+     * Retrieves a listing of active groups.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function index(Request $request)
     {
         $user = $request->user();
@@ -20,6 +24,12 @@ class SurveyController extends Controller
         return $groups;
     }
 
+    /**
+     * Retrieves the list of answers for a given group.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function state(Request $request, Group $group)
     {
         $user = $request->user();
@@ -29,11 +39,17 @@ class SurveyController extends Controller
         return $user->answers()->where('group_id', $group->id)->get();
     }
 
+    /**
+     * Creates or updates the answer for a given group and question.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function update(Request $request, Group $group, Question $question)
     {
         $user = $request->user();
         if (!$group->users->contains($user)) {
-            throw new AuthorizationException("");
+            throw new AuthorizationException;
         }
 
         $value = $request->query("value");

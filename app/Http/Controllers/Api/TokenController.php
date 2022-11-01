@@ -8,9 +8,25 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 
-class AuthController extends Controller
+class TokenController extends Controller
 {
-    public function login(Request $request)
+    /**
+     * Retrieves a listing of active tokens.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function index(Request $request)
+    {
+        return $request->user()->tokens;
+    }
+
+    /**
+     * Store a newly created token in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function store(Request $request)
     {
         if (!Auth::attempt($request->only('email', 'password'))) {
             throw ValidationException::withMessages([
@@ -28,7 +44,13 @@ class AuthController extends Controller
         ]);
     }
 
-    public function logout(Request $request)
+    /**
+     * Remove the current token from storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function destroy(Request $request)
     {
         return $request->user()->currentAccessToken()->delete();
     }
