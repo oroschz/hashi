@@ -19,7 +19,7 @@ class SurveyController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
-        $groups = $user->groups()->get();
+        $groups = $user->groups()->get()->fresh(['subject', 'professor']);
 
         return $groups;
     }
