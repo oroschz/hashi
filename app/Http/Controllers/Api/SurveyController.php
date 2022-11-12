@@ -12,19 +12,6 @@ use Illuminate\Http\Request;
 class SurveyController extends Controller
 {
     /**
-     * Retrieves a listing of active groups.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function index(Request $request)
-    {
-        $user = $request->user();
-        $groups = $user->groups()->get()->fresh(['subject', 'professor']);
-
-        return $groups;
-    }
-
-    /**
      * Retrieves the list of answers for a given group.
      *
      * @param  \Illuminate\Http\Request  $request
