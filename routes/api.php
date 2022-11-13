@@ -23,7 +23,7 @@ Route::controller(Api\TokenController::class)->group(function () {
 
 Route::middleware('auth:sanctum')->get('/group', [Api\GroupController::class, 'index']);
 
-Route::middleware('auth:sanctum')->controller(Api\SurveyController::class)->group(function () {
-    Route::get('/survey/{group}', 'state');
-    Route::post('/survey/{group}/{question}', 'update');
+Route::middleware('auth:sanctum')->controller(Api\AnswerController::class)->group(function () {
+    Route::get('/answer', 'index');
+    Route::post('/answer', 'update');
 });

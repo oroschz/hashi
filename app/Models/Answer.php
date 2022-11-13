@@ -21,6 +21,13 @@ class Answer extends Model
         'value'
     ];
 
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+        'user_id',
+        'group_id'
+    ];
+
     public function user()
     {
         $this->belongsTo(User::class);

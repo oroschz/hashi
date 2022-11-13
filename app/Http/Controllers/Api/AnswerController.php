@@ -6,10 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Answer;
 use App\Models\Group;
 use App\Models\Question;
-use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 
-class SurveyController extends Controller
+class AnswerController extends Controller
 {
     /**
      * Retrieves the list of answers for a given group.
@@ -17,11 +16,17 @@ class SurveyController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function state(Request $request, Group $group)
+    public function index(Request $request)
     {
+        $request->validate([
+            'group_id' => 'required|integer|exists:App\Models\Group,id'
+        ]);
+
+        $group = Group::find($request->group_id);
         $user = $request->user();
+
         if (!$group->users->contains($user)) {
-            return [];
+            return response()->json(['message' => 'Unauthorized.'], 401);
         }
         return $user->answers()->where('group_id', $group->id)->get();
     }
@@ -32,18 +37,25 @@ class SurveyController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, Group $group, Question $question)
+    public function update(Request $request)
     {
+        $request->validate([
+            'group_id' => 'required|integer|exists:App\Models\Group,id',
+            'question_id' => 'required|integer|exists:App\Models\Question,id',
+            'value' => 'required|integer|in:1,2,3,4'
+        ]);
+
+        $group = Group::find($request->group_id);
+        $question = Question::find($request->question_id);
+
         $user = $request->user();
         if (!$group->users->contains($user)) {
-            throw new AuthorizationException;
+            return response()->json(['message' => 'Unauthorized.'], 401);
         }
-
-        $value = $request->query("value");
 
         Answer::updateOrCreate(
             ['user_id' => $user->id, 'group_id' => $group->id, 'question_id' => $question->id],
-            ['value' => $value]
+            ['value' => $request->value]
         );
     }
 }
