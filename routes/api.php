@@ -27,3 +27,6 @@ Route::middleware('auth:sanctum')->controller(Api\AnswerController::class)->grou
     Route::get('/answer', 'index');
     Route::post('/answer', 'update');
 });
+
+Route::middleware('auth:sanctum')->get('/survey', [Api\SurveyController::class, 'index']);
+Route::middleware('auth:sanctum')->get('/me', [Api\UserController::class, 'about']);
